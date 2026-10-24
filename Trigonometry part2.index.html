@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สื่อการเรียนรู้ตรีโกณมิติ - สมการและอสมการ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            pink: '#fce7f3',
+                            pinkDark: '#f43f5e',
+                            cyan: '#e0f2fe',
+                            cyanDark: '#0284c7',
+                            bg: '#fff5f7',
+                            card: '#ffffff',
+                            sidebar: '#fdf2f8',
+                            text: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax 3 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                }
+            }
+        };
+    </script>
+    <script id="mathjax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #fff5f7;
+            color: #1e293b;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fce7f3;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f472b6;
+            border-radius: 3px;
+        }
+        .active-nav {
+            background-color: #fbcfe8 !important;
+            color: #be123c !important;
+            font-weight: 700;
+            border-left: 4px solid #f43f5e;
+        }
+    </style>
+</head>
+<body class="h-screen overflow-hidden flex flex-col md:flex-row bg-[#fff5f7]">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden flex items-center justify-between p-4 bg-white border-b border-pink-200 z-50 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-400 to-sky-400 flex items-center justify-center font-bold text-white shadow-md">
+                $\sin$
+            </div>
+            <div>
+                <h1 class="font-bold text-sm text-slate-800 leading-tight">ตรีโกณมิติ</h1>
+                <p class="text-xs text-sky-600">สมการและอสมการ</p>
+            </div>
+        </div>
+        <button id="mobileMenuBtn" onclick="toggleSidebar()" class="p-2 text-pink-600 hover:text-pink-800 focus:outline-none">
+            <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-80 bg-[#fdf2f8] border-r border-pink-200 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col h-full shadow-lg">
+        <!-- Sidebar Header -->
+        <div class="p-5 border-b border-pink-200 hidden md:flex items-center gap-3 bg-white">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-400 to-sky-400 flex items-center justify-center font-bold text-xl text-white shadow-md">
+                $\tan$
+            </div>
+            <div>
+                <h1 class="font-bold text-base text-slate-800">ตรีโกณมิติ</h1>
+                <p class="text-xs text-sky-600 font-semibold">ฟังก์ชันตรีโกณมิติ ตอนที่ 2</p>
+            </div>
+        </div>
+
+        <!-- Interactive Lab Button -->
+        <div class="p-4 border-b border-pink-200 bg-pink-50/50">
+            <button onclick="switchTab('interactive-lab')" class="w-full bg-gradient-to-r from-pink-400 to-sky-400 hover:from-pink-500 hover:to-sky-500 text-white p-3 rounded-xl shadow-md flex items-center justify-between transition-all group">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-compass-drafting text-lg group-hover:rotate-45 transition-transform"></i>
+                    <div class="text-left">
+                        <div class="text-xs text-pink-100">ห้องทดลองแบบปฏิสัมพันธ์</div>
+                        <div class="font-bold text-sm">วงกลมหนึ่งหน่วย & สามเหลี่ยม</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-xs opacity-80"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="flex-1 overflow-y-auto p-4 space-y-6 text-sm">
+            <!-- Part 1: Equations -->
+            <div>
+                <div class="text-xs font-bold uppercase tracking-wider text-pink-600 mb-2 px-3">1. สมการตรีโกณมิติ</div>
+                <ul class="space-y-1">
+                    <li><button onclick="switchTab('eq-intro')" class="nav-btn active-nav w-full text-left px-3 py-2 rounded-lg text-slate-700 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-mono font-bold">01</span><span>ทฤษฎีสมการตรีโกณมิติ</span></button></li>
+                    <li><button onclick="switchTab('eq-ex1')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex1</span><span>ตัวอย่างที่ 1</span></button></li>
+                    <li><button onclick="switchTab('eq-ex2')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex2</span><span>ตัวอย่างที่ 2</span></button></li>
+                    <li><button onclick="switchTab('eq-ex3')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex3</span><span>ตัวอย่างที่ 3</span></button></li>
+                    <li><button onclick="switchTab('eq-ex4')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex4</span><span>ตัวอย่างที่ 4</span></button></li>
+                    <li><button onclick="switchTab('eq-ex5')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex5</span><span>ตัวอย่างที่ 5</span></button></li>
+                    <li><button onclick="switchTab('eq-ex6')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex6</span><span>ตัวอย่างที่ 6</span></button></li>
+                    <li><button onclick="switchTab('eq-ex7')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex7</span><span>ตัวอย่างที่ 7</span></button></li>
+                    <li><button onclick="switchTab('eq-ex8')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex8</span><span>ตัวอย่างที่ 8</span></button></li>
+                    <li><button onclick="switchTab('eq-ex9')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex9</span><span>ตัวอย่างที่ 9</span></button></li>
+                    <li><button onclick="switchTab('eq-ex10')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex10</span><span>ตัวอย่างที่ 10</span></button></li>
+                    <li><button onclick="switchTab('eq-ex11')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-sky-600 font-bold">Ex11</span><span>ตัวอย่างที่ 11</span></button></li>
+                </ul>
+            </div>
+
+            <!-- Part 2: Inequalities -->
+            <div>
+                <div class="text-xs font-bold uppercase tracking-wider text-sky-600 mb-2 px-3">2. อสมการตรีโกณมิติ</div>
+                <ul class="space-y-1">
+                    <li><button onclick="switchTab('ineq-intro')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-mono font-bold">02</span><span>หลักการแก้อสมการ</span></button></li>
+                    <li><button onclick="switchTab('ineq-ex1')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-bold">Ineq1</span><span>ตัวอย่างอสมการที่ 1</span></button></li>
+                    <li><button onclick="switchTab('ineq-ex2')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-bold">Ineq2</span><span>ตัวอย่างอสมการที่ 2</span></button></li>
+                    <li><button onclick="switchTab('ineq-ex3')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-bold">Ineq3</span><span>ตัวอย่างอสมการที่ 3</span></button></li>
+                    <li><button onclick="switchTab('ineq-ex4')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-bold">Ineq4</span><span>ตัวอย่างอสมการที่ 4</span></button></li>
+                    <li><button onclick="switchTab('ineq-ex5')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-bold">Ineq5</span><span>ตัวอย่างอสมการที่ 5</span></button></li>
+                    <li><button onclick="switchTab('ineq-ex6')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-bold">Ineq6</span><span>ตัวอย่างอสมการที่ 6</span></button></li>
+                    <li><button onclick="switchTab('ineq-ex7')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-bold">Ineq7</span><span>ตัวอย่างอสมการที่ 7</span></button></li>
+                    <li><button onclick="switchTab('ineq-ex8')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2"><span class="w-6 text-xs text-pink-500 font-bold">Ineq8</span><span>ตัวอย่างอสมการที่ 8</span></button></li>
+                </ul>
+            </div>
+
+            <!-- Part 3: Summary & Exercise -->
+            <div>
+                <div class="text-xs font-bold uppercase tracking-wider text-rose-500 mb-2 px-3">3. สรุปและแบบฝึกหัด</div>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchTab('summary-formulas')" class="nav-btn w-full text-left px-3 py-2 rounded-lg text-slate-600 hover:bg-pink-100 transition-colors flex items-center gap-2">
+                            <span class="w-6 text-xs text-pink-600 font-mono font-bold">03</span>
+                            <span>สรุปสูตรที่ใช้ทั้งหมด</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="switchTab('quiz-10')" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-pink-700 bg-pink-100/80 hover:bg-pink-200 transition-colors flex items-center gap-2 font-bold">
+                            <span class="w-6 text-xs text-pink-600 font-mono">04</span>
+                            <span>โจทย์ 10 ข้อ</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto p-4 md:p-8 bg-[#fff5f7]">
+        <div class="max-w-4xl mx-auto space-y-6">
+
+            <!-- Banner Card -->
+            <div class="bg-gradient-to-r from-pink-200 via-sky-100 to-pink-100 p-6 rounded-3xl border border-pink-300 shadow-md relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="inline-block px-3 py-1 bg-white/80 text-pink-600 border border-pink-300 rounded-full text-xs font-bold mb-2 shadow-sm">
+                        สื่อการเรียนรู้แบบปฏิสัมพันธ์
+                    </span>
+                    <h1 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+                        ฟังก์ชันตรีโกณมิติ ตอนที่ 2: สมการและอสมการ
+                    </h1>
+                </div>
+            </div>
+
+            <!-- CONTENT SECTIONS -->
+
+            <!-- Equations Intro -->
+            <section id="eq-intro" class="tab-content space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-200 shadow-sm space-y-4">
+                    <h2 class="text-xl font-bold text-slate-800 border-b border-pink-100 pb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-pink-500"></i>
+                        สมการตรีโกณมิติ (Trigonometric Equations)
+                    </h2>
+                    <div class="space-y-3 text-slate-700 leading-relaxed text-sm md:text-base">
+                        <p>1. <strong>สมการตรีโกณมิติ</strong> คือสมการที่มีฟังก์ชันตรีโกณมิติเป็นส่วนประกอบ[cite: 2]</p>
+                        <p>2. <strong>การแก้สมการตรีโกณมิติ</strong> หมายถึงการหามุมที่ทำให้สมการของฟังก์ชันตรีโกณมิติเป็นจริง[cite: 2]</p>
+                        <p>3. หากสมการมีฟังก์ชันตรีโกณมิติหลายชนิด ควรแปลงให้เหลือฟังก์ชันชนิดเดียวก่อน โดยใช้อัตลักษณ์ตรีโกณมิติพื้นฐาน เช่น:[cite: 2]</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
+                            <div class="bg-pink-50 p-3 rounded-2xl border border-pink-200 text-center font-semibold text-pink-700">
+                                $\sin^2\theta + \cos^2\theta = 1$[cite: 2]
+                            </div>
+                            <div class="bg-sky-50 p-3 rounded-2xl border border-sky-200 text-center font-semibold text-sky-700">
+                                $1 + \tan^2\theta = \sec^2\theta$[cite: 2]
+                            </div>
+                            <div class="bg-pink-50 p-3 rounded-2xl border border-pink-200 text-center font-semibold text-pink-700">
+                                $1 + \cot^2\theta = \csc^2\theta$[cite: 2]
+                            </div>
+                        </div>
+                        <p>4. ใช้วิธีแยกตัวประกอบเมื่อเหมาะสม[cite: 2]</p>
+                        <p>5. หามุมคำตอบโดยพิจารณาว่าเป็นฟังก์ชันตรีโกณมิติชนิดใด และใช้เทคนิคที่เกี่ยวข้อง[cite: 2]</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Examples 1 to 11 and Inequalities 1 to 8 (Kept intact) -->
+            <section id="eq-ex1" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-200 shadow-sm space-y-4">
+                    <h2 class="text-xl font-bold text-slate-800 border-b border-pink-100 pb-3">ตัวอย่างที่ 1</h2>
+                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-200 font-medium text-slate-800">
+                        <strong>โจทย์:</strong> กำหนดให้ $(\sin\theta + \cos\theta)^2 = \frac{3}{2}$ เมื่อ $0 \le \theta \le \frac{\pi}{4}$ จงหาค่า $\arccos(\tan 3\theta)$[cite: 3]
+                    </div>
+                    <div class="space-y-3 text-slate-700 text-sm md:text-base leading-relaxed">
+                        <p class="font-bold text-sky-600">วิธีทำ:</p>
+                        <p>กระจายกำลังสอง: $(\sin\theta + \cos\theta)^2 = \sin^2\theta + 2\sin\theta\cos\theta + \cos^2\theta = \frac{3}{2}$[cite: 3]</p>
+                        <p>ใช้ $\sin^2\theta + \cos^2\theta = 1$ และ $2\sin\theta\cos\theta = \sin 2\theta$ จะได้ $1 + \sin 2\theta = \frac{3}{2}$[cite: 3]</p>
+                        <p>ดังนั้น $\sin 2\theta = \frac{1}{2}$[cite: 3]</p>
+                        <p>จาก $0 \le \theta \le \frac{\pi}{4}$ คูณทั้งสองข้างด้วย $2$ ได้ $0 \le 2\theta \le \frac{\pi}{2}$ ในช่วงนี้ $\sin 2\theta = \frac{1}{2}$ เมื่อ $2\theta = 30^\circ$ ดังนั้น $\theta = 15^\circ$[cite: 3]</p>
+                        <p>แทนค่าใน $\arccos(\tan 3\theta) = \arccos(\tan 45^\circ) = \arccos(1) = 0^\circ$[cite: 3]</p>
+                        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 font-bold">
+                            ตอบ: 0[cite: 3]
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Quiz 10 Questions Slide -->
+            <section id="quiz-10" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-200 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between border-b border-pink-100 pb-3">
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square text-pink-500"></i>
+                            โจทย์ 10 ข้อ
+                        </h2>
+                        <span class="text-xs bg-pink-100 text-pink-600 font-bold px-3 py-1 rounded-full">
+                            พิมพ์ตอบแล้วกดตรวจคำตอบ
+                        </span>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Q1 -->
+                        <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 1:</p>
+                            <p class="text-slate-700">จงแก้สมการ $2\cos^2 x + \cos x - 1 = 0$ เมื่อ $0 \le x \le 2\pi$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans1" placeholder="พิมพ์คำตอบ เช่น pi/3, pi, 5pi/3" class="flex-1 p-2.5 rounded-xl border border-pink-300 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
+                                <button onclick="checkAnswer(1, ['pi/3, pi, 5pi/3', 'pi/3,pi,5pi/3', '60, 180, 300'], 'x = \\frac{\\pi}{3}, \\pi, \\frac{5\\pi}{3}')" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result1" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="p-4 bg-sky-50/50 rounded-2xl border border-sky-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 2:</p>
+                            <p class="text-slate-700">จงหาค่า $x \in [0, 2\pi]$ ที่ทำให้ $\sin 2x = \cos x$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans2" placeholder="พิมพ์คำตอบ เช่น pi/6, pi/2, 5pi/6, 3pi/2" class="flex-1 p-2.5 rounded-xl border border-sky-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                <button onclick="checkAnswer(2, ['pi/6, pi/2, 5pi/6, 3pi/2', 'pi/6,pi/2,5pi/6,3pi/2'], 'x = \\frac{\\pi}{6}, \\frac{\\pi}{2}, \\frac{5\\pi}{6}, \\frac{3\\pi}{2}')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result2" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 3:</p>
+                            <p class="text-slate-700">จงแก้สมการ $\tan^2 x - 3 = 0$ เมื่อ $0 \le x \le \pi$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans3" placeholder="พิมพ์คำตอบ เช่น pi/3, 2pi/3" class="flex-1 p-2.5 rounded-xl border border-pink-300 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
+                                <button onclick="checkAnswer(3, ['pi/3, 2pi/3', 'pi/3,2pi/3', '60, 120'], 'x = \\frac{\\pi}{3}, \\frac{2\\pi}{3}')" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result3" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="p-4 bg-sky-50/50 rounded-2xl border border-sky-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 4:</p>
+                            <p class="text-slate-700">กำหนดให้ $4\sin^2\theta = 3$ เมื่อ $0 \le \theta \le 2\pi$ จงหาเซตคำตอบของ $\theta$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans4" placeholder="พิมพ์คำตอบ เช่น pi/3, 2pi/3, 4pi/3, 5pi/3" class="flex-1 p-2.5 rounded-xl border border-sky-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                <button onclick="checkAnswer(4, ['pi/3, 2pi/3, 4pi/3, 5pi/3', 'pi/3,2pi/3,4pi/3,5pi/3'], '\\theta = \\frac{\\pi}{3}, \\frac{2\\pi}{3}, \\frac{4\\pi}{3}, \\frac{5\\pi}{3}')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result4" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 5:</p>
+                            <p class="text-slate-700">จงหาค่า $x \in [0, 2\pi]$ จากสมการ $\cos 2x + 3\sin x - 2 = 0$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans5" placeholder="พิมพ์คำตอบ เช่น pi/6, 5pi/6" class="flex-1 p-2.5 rounded-xl border border-pink-300 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
+                                <button onclick="checkAnswer(5, ['pi/6, 5pi/6', 'pi/6,5pi/6', '30, 150'], 'x = \\frac{\\pi}{6}, \\frac{5\\pi}{6}')" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result5" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q6 -->
+                        <div class="p-4 bg-sky-50/50 rounded-2xl border border-sky-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 6:</p>
+                            <p class="text-slate-700">จงแก้อสมการ $\sin x > \frac{1}{2}$ เมื่อ $0 \le x \le 2\pi$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans6" placeholder="พิมพ์คำตอบ เช่น (pi/6, 5pi/6)" class="flex-1 p-2.5 rounded-xl border border-sky-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                <button onclick="checkAnswer(6, ['(pi/6, 5pi/6)', '(pi/6,5pi/6)', 'pi/6 < x < 5pi/6'], 'x \\in \\left(\\frac{\\pi}{6}, \\frac{5\\pi}{6}\\right)')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result6" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q7 -->
+                        <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 7:</p>
+                            <p class="text-slate-700">จงแก้อสมการ $2\cos x + 1 \le 0$ เมื่อ $0 \le x \le 2\pi$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans7" placeholder="พิมพ์คำตอบ เช่น [2pi/3, 4pi/3]" class="flex-1 p-2.5 rounded-xl border border-pink-300 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
+                                <button onclick="checkAnswer(7, ['[2pi/3, 4pi/3]', '[2pi/3,4pi/3]'], 'x \\in \\left[\\frac{2\\pi}{3}, \\frac{4\\pi}{3}\\right]')" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result7" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q8 -->
+                        <div class="p-4 bg-sky-50/50 rounded-2xl border border-sky-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 8:</p>
+                            <p class="text-slate-700">จงแก้อสมการ $\tan x \ge 1$ เมื่อ $0 \le x < \pi$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans8" placeholder="พิมพ์คำตอบ เช่น [pi/4, pi/2)" class="flex-1 p-2.5 rounded-xl border border-sky-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                <button onclick="checkAnswer(8, ['[pi/4, pi/2)', '[pi/4,pi/2)'], 'x \\in \\left[\\frac{\\pi}{4}, \\frac{\\pi}{2}\\right)')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result8" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q9 -->
+                        <div class="p-4 bg-pink-50/50 rounded-2xl border border-pink-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 9:</p>
+                            <p class="text-slate-700">จงหาเซตคำตอบของอสมการ $2\sin^2 x - 3\sin x + 1 \le 0$ เมื่อ $0 \le x \le 2\pi$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans9" placeholder="พิมพ์คำตอบ เช่น [pi/6, 5pi/6]" class="flex-1 p-2.5 rounded-xl border border-pink-300 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
+                                <button onclick="checkAnswer(9, ['[pi/6, 5pi/6]', '[pi/6,5pi/6]'], 'x \\in \\left[\\frac{\\pi}{6}, \\frac{5\\pi}{6}\\right]')" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result9" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                        <!-- Q10 -->
+                        <div class="p-4 bg-sky-50/50 rounded-2xl border border-sky-200 space-y-3">
+                            <p class="font-bold text-slate-800">ข้อที่ 10:</p>
+                            <p class="text-slate-700">สามเหลี่ยม $ABC$ มีด้าน $a = 4$, $b = 6$ และมุม $C = 30^\circ$ จงหาพื้นที่ของสามเหลี่ยม $ABC$</p>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="ans10" placeholder="พิมพ์คำตอบ เช่น 6" class="flex-1 p-2.5 rounded-xl border border-sky-300 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                <button onclick="checkAnswer(10, ['6', '6 ตารางหน่วย'], 'พื้นที่ = \\frac{1}{2}(4)(6)\\sin 30^\\circ = 6\\text{ ตารางหน่วย}')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors">
+                                    ตรวจคำตอบ
+                                </button>
+                            </div>
+                            <div id="result10" class="hidden text-sm p-3 rounded-xl"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary Formulas and Interactive Lab (Kept intact) -->
+            <section id="summary-formulas" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-200 shadow-sm space-y-6">
+                    <h2 class="text-xl font-bold text-slate-800 border-b border-pink-100 pb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-bookmark text-rose-500"></i>
+                        สรุปสูตรตรีโกณมิติทั้งหมด
+                    </h2>
+                    
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-pink-600">1. อัตลักษณ์ตรีโกณมิติพื้นฐาน[cite: 2]</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="p-3 bg-pink-50 rounded-xl border border-pink-200">$\sin^2\theta + \cos^2\theta = 1$[cite: 2]</div>
+                            <div class="p-3 bg-sky-50 rounded-xl border border-sky-200">$1 + \tan^2\theta = \sec^2\theta$[cite: 2]</div>
+                            <div class="p-3 bg-pink-50 rounded-xl border border-pink-200">$1 + \cot^2\theta = \csc^2\theta$[cite: 2]</div>
+                            <div class="p-3 bg-sky-50 rounded-xl border border-sky-200">$\tan\theta = \frac{\sin\theta}{\cos\theta}$[cite: 4]</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="interactive-lab" class="tab-content hidden space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-pink-200 shadow-sm space-y-6">
+                    <h2 class="text-xl font-bold text-slate-800 border-b border-pink-100 pb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-flask text-sky-500"></i>
+                        ห้องทดลองปฏิสัมพันธ์ (Interactive Lab)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-pink-50/50 p-4 rounded-2xl border border-pink-200 flex flex-col items-center">
+                            <h3 class="font-bold text-slate-700 mb-3">จำลองวงกลมหนึ่งหน่วย</h3>
+                            <canvas id="unitCircleCanvas" width="220" height="220" class="bg-white rounded-2xl shadow-inner border border-pink-200"></canvas>
+                            <div class="w-full space-y-2 mt-4">
+                                <label class="text-xs font-bold text-slate-600 flex justify-between">
+                                    <span>ปรับค่ามุม ($\theta$):</span>
+                                    <span id="angleValue" class="text-pink-600">45°</span>
+                                </label>
+                                <input type="range" id="angleSlider" min="0" max="360" value="45" class="w-full accent-pink-500">
+                            </div>
+                        </div>
+
+                        <div class="bg-sky-50/50 p-4 rounded-2xl border border-sky-200 flex flex-col justify-between">
+                            <h3 class="font-bold text-slate-700 mb-3">คำนวณพื้นที่สามเหลี่ยม $\frac{1}{2}ab\sin C$</h3>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1">ความยาวด้าน a:</label>
+                                    <input type="number" id="sideA" value="5" class="w-full p-2 rounded-xl border border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1">ความยาวด้าน b:</label>
+                                    <input type="number" id="sideB" value="8" class="w-full p-2 rounded-xl border border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1">มุม C (องศา):</label>
+                                    <input type="number" id="angleC" value="30" class="w-full p-2 rounded-xl border border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                </div>
+                            </div>
+                            <div class="p-3 bg-white rounded-xl border border-sky-200 mt-4 text-center font-bold text-sky-700" id="calcResult">
+                                พื้นที่ = 10.00
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- JavaScript Navigation & Quiz Logic -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav'));
+            
+            const activeContent = document.getElementById(tabId);
+            if(activeContent) activeContent.classList.remove('hidden');
+
+            const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+            if(activeBtn) activeBtn.classList.add('active-nav');
+
+            if(window.MathJax) {
+                MathJax.typesetPromise();
+            }
+
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+            }
+
+            if(tabId === 'interactive-lab') {
+                drawUnitCircle();
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        // Interactive Answer Checker Function
+        function checkAnswer(qNum, correctAnswers, solutionMathJax) {
+            const userAns = document.getElementById('ans' + qNum).value.trim().toLowerCase();
+            const resDiv = document.getElementById('result' + qNum);
+            
+            resDiv.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-rose-100', 'text-rose-800');
+            
+            const isCorrect = correctAnswers.some(ans => userAns === ans.toLowerCase());
+
+            if (isCorrect) {
+                resDiv.classList.add('bg-emerald-100', 'text-emerald-800');
+                resDiv.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 mr-2"></i><strong>ถูกต้อง! 🎉</strong> เก่งมากครับ';
+            } else {
+                resDiv.classList.add('bg-rose-100', 'text-rose-800');
+                resDiv.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600 mr-2"></i><strong>ยังไม่ถูกต้อง!</strong> <br><span class="mt-1 block">เฉลย: $' + solutionMathJax + '$</span>';
+                if(window.MathJax) {
+                    MathJax.typesetPromise([resDiv]);
+                }
+            }
+        }
+
+        // Canvas Visualizer Logic
+        const slider = document.getElementById('angleSlider');
+        const angleValue = document.getElementById('angleValue');
+        
+        if(slider) {
+            slider.addEventListener('input', (e) => {
+                angleValue.innerText = e.target.value + '°';
+                drawUnitCircle();
+            });
+        }
+
+        function drawUnitCircle() {
+            const canvas = document.getElementById('unitCircleCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const deg = parseFloat(slider.value);
+            const rad = deg * Math.PI / 180;
+            
+            const cx = 110, cy = 110, r = 80;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(10, cy); ctx.lineTo(210, cy);
+            ctx.moveTo(cx, 10); ctx.lineTo(cx, 210);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#f472b6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.stroke();
+
+            const px = cx + r * Math.cos(-rad);
+            const py = cy + r * Math.sin(-rad);
+
+            ctx.strokeStyle = '#0284c7';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(px, py);
+            ctx.stroke();
+
+            ctx.fillStyle = '#f43f5e';
+            ctx.beginPath();
+            ctx.arc(px, py, 5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function calculateArea() {
+            const a = parseFloat(document.getElementById('sideA')?.value || 0);
+            const b = parseFloat(document.getElementById('sideB')?.value || 0);
+            const cDeg = parseFloat(document.getElementById('angleC')?.value || 0);
+            const res = document.getElementById('calcResult');
+            if(res) {
+                const area = 0.5 * a * b * Math.sin(cDeg * Math.PI / 180);
+                res.innerText = 'พื้นที่ = ' + area.toFixed(2);
+            }
+        }
+
+        ['sideA', 'sideB', 'angleC'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', calculateArea);
+        });
+    </script>
+</body>
+</html>
